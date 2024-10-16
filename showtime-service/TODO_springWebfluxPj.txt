@@ -1,0 +1,29 @@
+showtime_service/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── example/
+│   │   │           └── showtime/
+│   │   │               ├── ShowTimeApplication.java
+│   │   │               ├── controller/
+│   │   │               │   └── ShowtimeController.java
+│   │   │               ├── model/
+│   │   │               │   └── Showtime.java
+│   │   │               ├── repository/
+│   │   │               │   └── ShowtimeRepository.java
+│   │   │               ├── service/
+│   │   │               │   └── ShowtimeService.java
+│   │   │               └── config/
+│   │   │                   └── WebFluxConfig.java
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       └── application-test.yml
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── example/
+│                   └── showtime/
+│                       └── ShowtimeApplicationTests.java
+├── pom.xml
+└── Dockerfile
