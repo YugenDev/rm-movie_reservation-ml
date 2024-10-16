@@ -1,2 +1,17 @@
+import os
+
 PROJECT_NAME = "MRS | User microservice 👥"
 DESCRIPTION = "User management service for MRS"
+
+POSTGRES_USER = os.getenv("POSTGRES_USER", "myuser")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "mypassword")
+POSTGRES_SERVER = os.getenv("POSTGRES_SERVER", "localhost")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
+POSTGRES_DB = os.getenv("POSTGRES_DB", "mydb")
+
+DB_POOL_SIZE = 10
+DB_MAX_OVERFLOW = 20
+DB_POOL_RECYCLE = 3600
+DB_POOL_TIMEOUT = 30
+
+DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
