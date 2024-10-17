@@ -5,10 +5,11 @@ from routes import user_routes
 
 
 app = FastAPI(
-    title = settings.PROJECT_NAME,
-    version = "1.0.0",
-    description = settings.DESCRIPTION
+    title=settings.PROJECT_NAME,
+    version="1.0.0",
+    description=settings.DESCRIPTION
 )
+
 
 @app.get("/healthcheck", tags=["healthcheck"])
 async def root():
