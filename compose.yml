@@ -1,0 +1,22 @@
+services:
+  users-db:
+    build: ./DB/user-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: users
+    ports:
+      - "5432:5432"
+  
+  user-service:
+    build: ./user-service
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: users
+      POSTGRES_SERVER: users-db
+      POSTGRES_PORT: 5432
+    depends_on:
+      - users-db
+    ports:
+      - "8000:8000"
