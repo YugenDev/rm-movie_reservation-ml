@@ -3,11 +3,11 @@ import os
 PROJECT_NAME = "MRS | User microservice 👥"
 DESCRIPTION = "User management service for MRS"
 
-POSTGRES_USER = os.getenv("POSTGRES_USER", "myuser")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "mypassword")
+POSTGRES_USER = os.getenv("POSTGRES_USER", "admin")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "admin123")
 POSTGRES_SERVER = os.getenv("POSTGRES_SERVER", "localhost")
 POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
-POSTGRES_DB = os.getenv("POSTGRES_DB", "mydb")
+POSTGRES_DB = os.getenv("POSTGRES_DB", "users")
 
 DB_POOL_SIZE = 10
 DB_MAX_OVERFLOW = 20

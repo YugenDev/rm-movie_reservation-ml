@@ -1,12 +1,16 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, UUID4
+from typing import Optional
 
 class UserBaseSchema(BaseModel):
     username: str
     email: str
-    role: str
+    role: Optional[str] = "user"
+
+class UserCreateSchema(UserBaseSchema):
+    password: str
 
 class UserSchema(UserBaseSchema):
-    user_id: str
+    user_id: UUID4
     password: str
 
 class UserLoginSchema(BaseModel):
@@ -14,9 +18,11 @@ class UserLoginSchema(BaseModel):
     password: str
 
 class UserUpdateSchema(UserBaseSchema):
+    user_id: UUID4
     password: str
 
 class UserResponseSchema(UserBaseSchema):
+    user_id: UUID4
     pass
 
 class UserLoginResponseSchema(BaseModel):
