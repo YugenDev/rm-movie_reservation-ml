@@ -1,3 +1,11 @@
+# Try it yourself ;)
+
+## Run it with docker compose
+
+```bash
+docker-compose up --build
+```
+
 # Languages and Frameworks
 
 ### 1. **User Service**
