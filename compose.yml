@@ -7,6 +7,16 @@ services:
       POSTGRES_DB: users
     ports:
       - "5432:5432"
+    networks:
+      - mr-network
+
+  rabbitmq:
+    build: ./rabbitMQ
+    ports:
+      - "5672:5672"   # Communication
+      - "15672:15672" # Admin panel
+    networks:
+      - mr-network
   
   user-service:
     build: ./user-service
@@ -16,7 +26,21 @@ services:
       POSTGRES_DB: users
       POSTGRES_SERVER: users-db
       POSTGRES_PORT: 5432
+      JWT_SECRET_KEY: 449ad50f394e042b37d6d038083adb5d595c633563d67449f6a86ad92e9bdcd622691a8a2a256c111ffed26c558e84f815f1b3935d5b39018495077335b0b02699bbf127861a3337e287ca1fc2ba83a24530e95bce194b8d1a2b6922a2007ff7af8fab975dc9f466f686fc8d63371071a53cd635eac91dd54ab805a3e5fa7dc8706ac92f930dcbc36d837af12f5966ca20680c60d12b7f651f377da0b614233569d3ea77b369f10fc4879e5a2a96716254d7d2de07959fc0fec6ec944679d7c1e9399f4cffd9e071b352351ec4e09a67bea357f95f5e20f768ea4cd568734aa25169c8b380b4f17332807b70b80cc3ad31873ffe65d3088177f8c4d85a976bae
+      JWT_ALGORITHM: HS256
+      RABBITMQ_SERVER: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASSWORD: guest
     depends_on:
       - users-db
+      - rabbitmq
     ports:
       - "8000:8000"
+    networks:
+      - mr-network
+
+
+networks:
+  mr-network:
+    driver: bridge
