@@ -1,11 +1,19 @@
 from sqlalchemy.orm import Session
 from repositories.user_repository import UserRepository
 from schemas.user_schema import UserCreateSchema, UserUpdateSchema
+from utils.rabbitmq import RabbitMQConnection
+from config.settings import RABBITMQ_SERVER, RABBITMQ_PORT, RABBITMQ_USER, RABBITMQ_PASSWORD
 
 
 class UserService:
     def __init__(self):
         self.repository = UserRepository()
+        self.rabbitmq = RabbitMQConnection(
+            host=RABBITMQ_SERVER,
+            port=RABBITMQ_PORT,
+            user=RABBITMQ_USER,
+            password=RABBITMQ_PASSWORD
+        )
 
     def get_users(self, db: Session, skip: int = 0, limit: int = 100):
         return self.repository.get_users(db, skip, limit)
@@ -14,7 +22,15 @@ class UserService:
         return self.repository.get_user(db, user_id)
 
     def create_user(self, db: Session, user: UserCreateSchema):
-        return self.repository.create_user(db, user)
+        created_user = self.repository.create_user(db, user)
+        
+        # Connect to rabbitMQ and send a messagge to the queue
+        self.rabbitmq.connect()
+        self.rabbitmq.declare_queue(queue_name='user_notifications')
+        self.rabbitmq.publish_message(queue_name='user_notifications', message=f'User {created_user.user_id} created')
+        self.rabbitmq.close()
+        
+        return created_user
 
     def update_user(self, db: Session, user_id: str, user: UserUpdateSchema):
         return self.repository.update_user(db, user_id, user)
