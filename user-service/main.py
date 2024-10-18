@@ -11,7 +11,7 @@ app = FastAPI(
 )
 
 
-@app.get("/healthcheck", tags=["healthcheck"])
+@app.get("/", tags=["healthcheck"])
 async def root():
     return {"message": "User service is up!!! :)"}
 
