@@ -23,6 +23,8 @@
       "ms-azuretools.vscode-docker"
       "ms-python.debugpy"
       "ms-python.python"
+      "ms-python.flake8"
+      "usernamehw.errorlens"
     ];
     # Enable previews
     previews = {
