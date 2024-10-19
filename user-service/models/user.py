@@ -13,6 +13,6 @@ class User(Base):
 
     user_id = Column(UUID, primary_key=True, index=True, unique=True, nullable=False, server_default='gen_random_uuid()')
     username = Column(String, unique=True)
-    password = Column(String)
+    password_hash = Column(String, nullable=False)
     email = Column(String, unique=True)
     role = Column(Enum(UserRole), default=UserRole.user)
