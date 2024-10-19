@@ -7,6 +7,9 @@ class UserBaseSchema(BaseModel):
     email: str
     role: Optional[str] = "user"
 
+    class Config:
+        from_attributes = True
+
 
 class UserCreateSchema(UserBaseSchema):
     password: str
@@ -29,7 +32,9 @@ class UserUpdateSchema(UserBaseSchema):
 
 class UserResponseSchema(UserBaseSchema):
     user_id: UUID4
-    pass
+
+    class Config:
+        from_attributes = True
 
 
 class UserLoginResponseSchema(BaseModel):
