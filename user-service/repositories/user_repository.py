@@ -3,6 +3,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from fastapi import HTTPException, status
 from models.user import User
 from schemas.user_schema import UserCreateSchema, UserUpdateSchema, UserResponseSchema
+from utils.jwt_helper import get_password_hash
 
 
 class UserRepository:
@@ -15,7 +16,7 @@ class UserRepository:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
         return user
 
-    def create_user(self, db: Session, user: UserCreateSchema):
+    def create_user(self, db: Session, user: UserCreateSchema) -> UserResponseSchema:
         if db.query(User).filter(User.email == user.email).first():
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
         if db.query(User).filter(User.username == user.username).first():
@@ -25,11 +26,24 @@ class UserRepository:
         if len(user.password) < 8:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Password must be at least 8 characters long")
         try:
-            new_user = User(**user.model_dump())
+
+            hashed_password = get_password_hash(user.password)
+
+            new_user = User(
+                username=user.username,
+                email=user.email,
+                password_hash=hashed_password,
+                role=user.role
+            )
             db.add(new_user)
             db.commit()
             db.refresh(new_user)
-            return new_user
+            return UserResponseSchema(
+                user_id=str(new_user.user_id),
+                username=new_user.username,
+                email=new_user.email,
+                role=new_user.role
+            )
         except SQLAlchemyError as e:
             db.rollback()
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
