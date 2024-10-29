@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from repositories.user_repository import UserRepository
+from db.repositories.user_repository import UserRepository
 from utils.jwt_helper import create_access_token
-from schemas.user_schema import UserCreateSchema, UserUpdateSchema, UserLoginSchema
+from api.v1.schemas.user_schema import UserCreate as UserCreateSchema, UserUpdate as UserUpdateSchema, UserResponse as UserResponseSchema
+from api.v1.schemas.login_schema import UserLogin as UserLoginSchema
 from utils.rabbitmq import RabbitMQConnection
 from config.settings import RABBITMQ_SERVER, RABBITMQ_PORT, RABBITMQ_USER, RABBITMQ_PASSWORD
 from datetime import timedelta

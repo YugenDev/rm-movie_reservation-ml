@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import UUID4
 from sqlalchemy.orm import Session
 from typing import List
-from schemas.user_schema import UserCreateSchema, UserUpdateSchema, UserResponseSchema, UserLoginSchema
+from schemas.user_schema import UserCreate as UserCreateSchema, UserUpdate as UserUpdateSchema, UserResponse as UserResponseSchema, UserLogin as UserLoginSchema
 from services.user_service import UserService
 from utils.dependencies import get_current_user
-from config.session import get_db
+from db.session import get_db
 
 
 router = APIRouter()
@@ -17,15 +16,15 @@ def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return user_service.get_users(db, skip, limit)
 
 
-@router.get("/{user_id}", response_model=UserResponseSchema)
-def get_user(user_id: UUID4, db: Session = Depends(get_db)):
+@router.get("/user/{user_id}", response_model=UserResponseSchema)
+def get_user(user_id: str, db: Session = Depends(get_db)):
     user = user_service.get_user(db, user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
 
-@router.post("/", response_model=UserResponseSchema)
+@router.post("/register", response_model=UserResponseSchema)
 def register_user(user: UserCreateSchema, db: Session = Depends(get_db)):
     return user_service.create_user(db, user)
 
@@ -35,18 +34,18 @@ def login(user: UserLoginSchema, db: Session = Depends(get_db)):
     return user_service.login(db, user)
 
 
-@router.put("/{user_id}", response_model=UserResponseSchema)
-def update_user(user_id: UUID4, user: UserUpdateSchema, db: Session = Depends(get_db)):
+@router.put("/update/{user_id}", response_model=UserResponseSchema)
+def update_user(user_id: str, user: UserUpdateSchema, db: Session = Depends(get_db)):
     return user_service.update_user(db, user_id, user)
 
 
-@router.delete("/{user_id}")
+@router.delete("/delete/{user_id}")
 def delete_user(
-    user_id: UUID4,
+    user_id: str,
     db: Session = Depends(get_db),
     current_user: UserResponseSchema = Depends(get_current_user)
 ):
-    if str(current_user.user_id) != str(user_id) and current_user.role != "admin":
+    if str(current_user.user_id) != user_id and current_user.role != "admin":
         raise HTTPException(
             status_code=403,
             detail="You do not have permission to delete this user."

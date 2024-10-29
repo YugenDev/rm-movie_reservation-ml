@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from config import settings
-from config.session import engine, Base
-from routes import user_routes
+from db.session import engine, Base
+from api.v1.routers import user_routes
 
 
 app = FastAPI(
