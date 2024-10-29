@@ -6,7 +6,7 @@ class UserRole(str, Enum):
     admin = 'admin'
     user = 'user'
 
-class Login(BaseModel):
+class LoginSchema(BaseModel):
     email: EmailStr
     password: str
 
