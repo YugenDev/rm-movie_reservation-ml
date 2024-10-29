@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr, constr
 from enum import Enum
 from typing import Optional
+from uuid import UUID
 
 
 class UserRole(str, Enum):
@@ -21,7 +22,7 @@ class UserUpdate(BaseModel):
 
 # Generic User response
 class UserResponse(BaseModel):
-    user_id: str
+    user_id: UUID
     username: str
     email: EmailStr
     role: UserRole
