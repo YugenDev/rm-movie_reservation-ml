@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from config import settings
 from db.session import engine, Base
-from api.v1.routers import user_routes
+from api.v1.routers import user_routes, auth_routes
 
 
 app = FastAPI(
@@ -18,6 +18,7 @@ async def root():
 Base.metadata.create_all(bind=engine)
 
 app.include_router(user_routes.router, prefix="/users", tags=["users"])
+app.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
 
 if __name__ == "__main__":
     import uvicorn
