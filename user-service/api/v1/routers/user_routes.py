@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from api.v1.schemas.user_schema import UserCreate as UserCreateSchema, UserUpdate as UserUpdateSchema, UserResponse as UserResponseSchema
-from api.v1.schemas.login_schema import LoginSchema, LoginResponse
 from services.user_service import UserService
 from utils.dependencies import get_current_user
 from db.session import get_db
@@ -28,11 +27,6 @@ def get_user(user_id: str, db: Session = Depends(get_db)):
 @router.post("/register", response_model=UserResponseSchema)
 def register_user(user: UserCreateSchema, db: Session = Depends(get_db)):
     return user_service.create_user(db, user)
-
-
-@router.post("/login", response_model=LoginResponse)
-def login(credentials: LoginSchema, db: Session = Depends(get_db)):
-    return user_service.login(db, credentials)
 
 
 @router.put("/update/{user_id}", response_model=UserResponseSchema)
