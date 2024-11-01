@@ -9,9 +9,3 @@ class UserRole(str, Enum):
 class LoginSchema(BaseModel):
     email: EmailStr
     password: str
-
-class LoginResponse(BaseModel):
-    username: str
-    role: UserRole
-    access_token: str
-    token_type: str
