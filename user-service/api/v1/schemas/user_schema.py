@@ -8,17 +8,20 @@ class UserRole(str, Enum):
     admin = 'admin'
     user = 'user'
 
+
 class UserCreate(BaseModel):
-    username: constr(min_length=1, max_length=50)  
-    password: constr(min_length=8)  
-    email: EmailStr  
+    username: constr(min_length=1, max_length=50)
+    password: constr(min_length=8)
+    email: EmailStr
     role: Optional[UserRole] = UserRole.user
+
 
 class UserUpdate(BaseModel):
     username: Optional[constr(min_length=1, max_length=50)]
     password: Optional[constr(min_length=8)]
     email: Optional[EmailStr]
     role: Optional[UserRole]
+
 
 # Generic User response
 class UserResponse(BaseModel):
