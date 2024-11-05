@@ -25,6 +25,7 @@
       "ms-python.python"
       "ms-python.flake8"
       "usernamehw.errorlens"
+      "rangav.vscode-thunder-client"
     ];
     # Enable previews
     previews = {
