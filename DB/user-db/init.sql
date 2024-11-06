@@ -1,4 +1,3 @@
--- Crear la tabla 'users'
 CREATE TABLE IF NOT EXISTS users (
     user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -7,7 +6,6 @@ CREATE TABLE IF NOT EXISTS users (
     role VARCHAR(10) CHECK (role IN ('admin', 'user')) NOT NULL
 );
 
--- Insertar datos de prueba
 INSERT INTO users (username, password_hash, email, role)
 VALUES 
     ('juan_admin', 'hashed_password_123', 'juan.admin@example.com', 'admin'),
