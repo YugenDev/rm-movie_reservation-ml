@@ -20,7 +20,7 @@ class UserUpdate(BaseModel):
     username: Optional[constr(min_length=1, max_length=50)]
     password: Optional[constr(min_length=8)]
     email: Optional[EmailStr]
-    role: Optional[UserRole]
+    role: Optional[UserRole] = None
 
 
 # Generic User response
