@@ -13,7 +13,7 @@ app = FastAPI(
 
 @app.get("/", tags=["healthcheck"])
 async def root():
-    return {"message": "User service is up!!! :)"}
+    return {"message": "User service is up! 🐍👤🚀"}
 
 Base.metadata.create_all(bind=engine)
 
