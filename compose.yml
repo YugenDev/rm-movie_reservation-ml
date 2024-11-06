@@ -9,6 +9,17 @@ services:
       - "5432:5432"
     networks:
       - mr-network
+  
+  movies-db:
+    build: ./DB/movie-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: movies
+    ports:
+      - "5433:5432"
+    networks:
+      - mr-network
 
   rabbitmq:
     build: ./rabbitMQ
@@ -37,6 +48,16 @@ services:
       - rabbitmq
     ports:
       - "8000:8000"
+    networks:
+      - mr-network
+
+  movie-service:
+    build: ./movie-service
+
+    ports:
+      - "8081:8081"
+    depends_on:
+      - movies-db
     networks:
       - mr-network
 
