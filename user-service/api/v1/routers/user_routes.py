@@ -40,7 +40,13 @@ def update_user(
     if str(current_user.user_id) != user_id and user_role != "admin":
         raise HTTPException(
             status_code=403,
-            detail="You do not have permission to delete this user."
+            detail="You do not have permission to update this user."
+        )
+
+    if user_role == "user" and user.role is not None:
+        raise HTTPException(
+            status_code=403,
+            detail="You do not have permission to change your role."
         )
 
     return user_service.update_user(db, user_id, user)
