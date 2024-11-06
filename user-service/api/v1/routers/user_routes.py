@@ -30,25 +30,20 @@ def register_user(user: UserCreateSchema, db: Session = Depends(get_db)):
 
 
 @router.put("/update/{user_id}", response_model=UserResponseSchema)
-def update_user(user_id: str, user: UserUpdateSchema, db: Session = Depends(get_db)):
-    return user_service.update_user(db, user_id, user)
-
-
-@router.delete("/delete/{user_id}")
-def delete_user(
-    user_id: str,
+def update_user(
+    user_id: str, user: UserUpdateSchema,
     db: Session = Depends(get_db),
     current_user: UserResponseSchema = Depends(get_current_user)
 ):
-    if str(current_user.user_id) != user_id and current_user.role != "admin":
+    user_role = current_user.role.value
+
+    if str(current_user.user_id) != user_id and user_role != "admin":
         raise HTTPException(
             status_code=403,
             detail="You do not have permission to delete this user."
         )
 
-    user_service = UserService()
-    user_service.delete_user(db, user_id)
-    return {"message": "User deleted successfully"}
+    return user_service.update_user(db, user_id, user)
 
 
 @router.get("/email/{email}", response_model=UserResponseSchema)
@@ -65,3 +60,22 @@ def get_user_by_username(username: str, db: Session = Depends(get_db)):
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+
+@router.delete("/delete/{user_id}")
+def delete_user(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user: UserResponseSchema = Depends(get_current_user)
+):
+
+    user_role = current_user.role.value
+
+    if str(current_user.user_id) != user_id and user_role != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="You do not have permission to delete this user."
+        )
+
+    user_service.delete_user(db, user_id)
+    return {"message": "User deleted successfully"}
