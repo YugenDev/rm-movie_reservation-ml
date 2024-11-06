@@ -18,7 +18,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     payload = verify_access_token(token)
     if payload is None:
         raise credentials_exception
-    user = UserRepository().get_user_by_username(db, username=payload.get("sub"))
+    user = UserRepository().get_user(db, user_id=payload.get("sub"))
     if user is None:
         raise credentials_exception
     return user
