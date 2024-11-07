@@ -46,6 +46,5 @@ func (service *MovieService) CreateMovie(movie models.Movie) (models.Movie, erro
 		return models.Movie{}, echo.NewHTTPError(http.StatusInternalServerError, "failed to publish message")
 	}
 
-	// Guardar la nueva película en la base de datos
 	return service.Repo.CreateMovie(movie)
 }
