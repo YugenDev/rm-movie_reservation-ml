@@ -1,14 +1,18 @@
-# Usa una imagen base de Python
 FROM python:3.13.0-alpine
 
 WORKDIR /app
 
-COPY requirements.txt .
+RUN apk add --no-cache --virtual .build-deps \
+    gcc libc-dev libffi-dev \
+    && pip install --no-cache-dir poetry \
+    && apk del .build-deps
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY pyproject.toml poetry.lock* ./
+
+RUN poetry install --no-dev --no-root
 
 COPY . .
 
 EXPOSE 8000
 
-CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "--bind", "[::]:8000", "main:app"]
+CMD ["poetry", "run", "gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "--bind", "[::]:8000", "main:app"]
