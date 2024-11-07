@@ -5,8 +5,10 @@ import (
 	"github.com/labstack/echo"
 )
 
-func RegisterMovieRoutes(e *echo.Echo) {
+func RegisterMovieRoutes(e *echo.Echo, handler *handlers.MovieHandler) {
 
-	e.GET("/movies", handlers.GetMovies)
+	e.GET("/movies", handler.GetMovies)
+
+	e.POST("/movies", handler.CreateMovie)
 
 }
