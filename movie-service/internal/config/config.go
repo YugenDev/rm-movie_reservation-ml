@@ -1,14 +1,16 @@
 package config
 
 import (
-	"database/sql"
 	"fmt"
+	"github.com/YugenDev/rm-movie_service-ml/internal/models"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"log"
 	"os"
 	"time"
 )
 
-var DB *sql.DB
+var DB *gorm.DB
 
 var (
 	DBUser     = os.Getenv("POSTGRES_USER")
@@ -47,36 +49,53 @@ func GetDBConnectionString() (string, error) {
 		DBHost, DBUser, DBPassword, DBName, DBPort), nil
 }
 
-func InitDB() error {
+func InitDB() (*gorm.DB, error) {
 	var err error
 
 	for i := 0; i < 15; i++ {
 		connStr, err := GetDBConnectionString()
 		if err != nil {
-			return fmt.Errorf("failed to get DB connection %v", err)
+			return nil, fmt.Errorf("failed to get DB connection %v", err)
 		}
 
-		DB, err := sql.Open("postgres", connStr)
+		db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 		if err != nil {
 			log.Printf("Error opening database connection (attempt %d): %v", i+1, err)
 			time.Sleep(3 * time.Second)
 			continue
 		}
 
-		if err = DB.Ping(); err != nil {
+		sqlDB, err := db.DB()
+		if err != nil {
+			return nil, err
+		}
+
+		if err := sqlDB.Ping(); err != nil {
 			log.Printf("Error pinging database (attempt %d): %v", i+1, err)
 			time.Sleep(2 * time.Second)
 			continue
 		}
 
 		log.Println("Database connection established")
-		return nil
+
+		err = db.AutoMigrate(&models.Movie{})
+		if err != nil {
+			return nil, fmt.Errorf("failed to migrate database: %v", err)
+		}
+
+		log.Println("Database connection established")
+		return db, nil
 	}
-	return fmt.Errorf("failed to connect to the database after 5 attempts: %v", err)
+	return nil, fmt.Errorf("failed to connect to the database after 5 attempts: %v", err)
 }
 
-func CloseDB() {
-	if err := DB.Close(); err != nil {
+func CloseDB(db *gorm.DB) {
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Println("Error getting sql.DB from gorm.DB:", err)
+		return
+	}
+	if err := sqlDB.Close(); err != nil {
 		log.Println("Error closing the database:", err)
 	}
 }
