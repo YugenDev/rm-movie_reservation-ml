@@ -4,6 +4,7 @@ go 1.22.6
 
 require (
 	github.com/labstack/echo v3.3.10+incompatible
+	github.com/rabbitmq/amqp091-go v1.10.0
 	gorm.io/driver/postgres v1.5.9
 	gorm.io/gorm v1.25.12
 )
