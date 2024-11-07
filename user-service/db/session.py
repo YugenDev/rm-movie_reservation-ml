@@ -6,7 +6,7 @@ from tenacity import retry, wait_fixed, stop_after_attempt
 from config.settings import DATABASE_URL, DB_POOL_SIZE, DB_MAX_OVERFLOW, DB_POOL_RECYCLE, DB_POOL_TIMEOUT
 
 
-@retry(wait=wait_fixed(5), stop=stop_after_attempt(5))
+@retry(wait=wait_fixed(10), stop=stop_after_attempt(5))
 def create_engine_with_retries(uri):
     engine = create_engine(
         uri,
