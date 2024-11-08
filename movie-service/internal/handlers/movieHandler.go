@@ -33,6 +33,15 @@ func (h *MovieHandler) GetMovieByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, movie)
 }
 
+func (h *MovieHandler) GetMovieByTitle(c echo.Context) error {
+	title := c.Param("title")
+	movie, err := h.Service.GetMovieByTitle(title)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, movie)
+}
+
 func (h *MovieHandler) CreateMovie(c echo.Context) error {
 	var movie models.Movie
 	if err := c.Bind(&movie); err != nil {
