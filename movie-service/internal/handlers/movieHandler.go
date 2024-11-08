@@ -1,10 +1,11 @@
 package handlers
 
 import (
+	"net/http"
+
 	"github.com/YugenDev/rm-movie_service-ml/internal/models"
 	"github.com/YugenDev/rm-movie_service-ml/internal/services"
 	"github.com/labstack/echo"
-	"net/http"
 )
 
 type MovieHandler struct {
@@ -21,6 +22,15 @@ func (h *MovieHandler) GetMovies(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "failed to get movies")
 	}
 	return c.JSON(http.StatusOK, movies)
+}
+
+func (h *MovieHandler) GetMovieByID(c echo.Context) error {
+	id := c.Param("movie_id")
+	movie, err := h.Service.GetMovieByID(id)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, movie)
 }
 
 func (h *MovieHandler) CreateMovie(c echo.Context) error {
