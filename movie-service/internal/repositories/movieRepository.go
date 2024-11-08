@@ -31,9 +31,18 @@ func (repo *MovieRepository) GetMovieByID(id string) (models.Movie, error) {
 
 func (repo *MovieRepository) GetMoviesByTitle(title string) ([]models.Movie, error) {
 	var movies []models.Movie
-	if err := repo.DB.Where("title LIKE ?", "%"+title+"%").Find(&movies).Error; err != nil {
+	if err := repo.DB.Where("title ILIKE ?", "%"+title+"%").Find(&movies).Error; err != nil {
 		return []models.Movie{}, err
 	}
+	return movies, nil
+}
+
+func (repo *MovieRepository) GetMoviesByGenre(genre string) ([]models.Movie, error) {
+	var movies []models.Movie
+	if err := repo.DB.Where("genre ILIKE ?", "%"+genre+"%").Find(&movies).Error; err != nil {
+		return []models.Movie{}, err
+	}
+
 	return movies, nil
 }
 
