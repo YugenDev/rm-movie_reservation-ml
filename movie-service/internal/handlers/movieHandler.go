@@ -42,6 +42,16 @@ func (h *MovieHandler) GetMoviesByTitle(c echo.Context) error {
 	return c.JSON(http.StatusOK, movies)
 }
 
+func (h *MovieHandler) GetMoviesByGenre(c echo.Context) error {
+	genre := c.Param("genre")
+	movies, err := h.Service.GetMoviesByGenre(genre)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, movies)
+}
+
 func (h *MovieHandler) CreateMovie(c echo.Context) error {
 	var movie models.Movie
 	if err := c.Bind(&movie); err != nil {

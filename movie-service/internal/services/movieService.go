@@ -33,6 +33,23 @@ func (service *MovieService) GetMoviesByTitle(title string) ([]models.Movie, err
 	return service.Repo.GetMoviesByTitle(title)
 }
 
+func (service *MovieService) GetMoviesByGenre(genre string) ([]models.Movie, error) {
+	if genre == "" {
+		return nil, echo.NewHTTPError(http.StatusBadRequest, "genre is required")
+	}
+
+	movies, err := service.Repo.GetMoviesByGenre(genre)
+	if err != nil {
+		return []models.Movie{}, echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch movies by genre: "+genre)
+	}
+
+	if len(movies) == 0 {
+		return []models.Movie{}, echo.NewHTTPError(http.StatusNotFound, "No movies found by genre: "+genre)
+	}
+
+	return movies, nil
+}
+
 func (service *MovieService) CreateMovie(movie models.Movie) (models.Movie, error) {
 	movies, err := service.Repo.GetAllMovies()
 	if err != nil {
