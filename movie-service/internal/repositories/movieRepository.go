@@ -29,12 +29,12 @@ func (repo *MovieRepository) GetMovieByID(id string) (models.Movie, error) {
 	return movie, nil
 }
 
-func (repo *MovieRepository) GetMovieByTitle(title string) (models.Movie, error) {
-	var movie models.Movie
-	if err := repo.DB.Where("title = ?", title).First(&movie).Error; err != nil {
-		return models.Movie{}, err
+func (repo *MovieRepository) GetMoviesByTitle(title string) ([]models.Movie, error) {
+	var movies []models.Movie
+	if err := repo.DB.Where("title LIKE ?", "%"+title+"%").Find(&movies).Error; err != nil {
+		return []models.Movie{}, err
 	}
-	return movie, nil
+	return movies, nil
 }
 
 func (repo *MovieRepository) CreateMovie(movie models.Movie) (models.Movie, error) {

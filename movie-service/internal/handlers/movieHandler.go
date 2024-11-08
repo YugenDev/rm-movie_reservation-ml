@@ -33,13 +33,13 @@ func (h *MovieHandler) GetMovieByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, movie)
 }
 
-func (h *MovieHandler) GetMovieByTitle(c echo.Context) error {
+func (h *MovieHandler) GetMoviesByTitle(c echo.Context) error {
 	title := c.Param("title")
-	movie, err := h.Service.GetMovieByTitle(title)
+	movies, err := h.Service.GetMoviesByTitle(title)
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, movie)
+	return c.JSON(http.StatusOK, movies)
 }
 
 func (h *MovieHandler) CreateMovie(c echo.Context) error {

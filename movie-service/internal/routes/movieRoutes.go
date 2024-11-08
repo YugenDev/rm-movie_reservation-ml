@@ -9,7 +9,8 @@ func RegisterMovieRoutes(e *echo.Echo, handler *handlers.MovieHandler) {
 
 	e.GET("/movies", handler.GetMovies)
 	e.GET("/movies/:id", handler.GetMovieByID)
-	e.GET("/movie/title/:title", handler.GetMovieByTitle)
+	e.GET("/movies/title/:title", handler.GetMoviesByTitle)
+	//e.GET("/movies/genre/:genre", handler.GetMovieByGenre)
 
 	e.POST("/movies", handler.CreateMovie)
 

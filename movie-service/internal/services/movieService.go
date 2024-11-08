@@ -26,8 +26,8 @@ func (service *MovieService) GetMovieByID(id string) (models.Movie, error) {
 	return service.Repo.GetMovieByID(id)
 }
 
-func (service *MovieService) GetMovieByTitle(title string) (models.Movie, error) {
-	return service.Repo.GetMovieByTitle(title)
+func (service *MovieService) GetMoviesByTitle(title string) ([]models.Movie, error) {
+	return service.Repo.GetMoviesByTitle(title)
 }
 
 func (service *MovieService) CreateMovie(movie models.Movie) (models.Movie, error) {
