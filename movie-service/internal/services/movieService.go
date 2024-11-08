@@ -27,6 +27,9 @@ func (service *MovieService) GetMovieByID(id string) (models.Movie, error) {
 }
 
 func (service *MovieService) GetMoviesByTitle(title string) ([]models.Movie, error) {
+	if title == "" {
+		return nil, echo.NewHTTPError(http.StatusBadRequest, "title is required")
+	}
 	return service.Repo.GetMoviesByTitle(title)
 }
 
