@@ -2,11 +2,12 @@ package services
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/YugenDev/rm-movie_service-ml/internal/models"
 	"github.com/YugenDev/rm-movie_service-ml/internal/repositories"
 	"github.com/YugenDev/rm-movie_service-ml/internal/utils"
 	"github.com/labstack/echo"
-	"net/http"
 )
 
 type MovieService struct {
@@ -19,6 +20,10 @@ func NewMovieService(repo *repositories.MovieRepository) *MovieService {
 
 func (service *MovieService) GetAllMovies() ([]models.Movie, error) {
 	return service.Repo.GetAllMovies()
+}
+
+func (service *MovieService) GetMovieByID(id string) (models.Movie, error) {
+	return service.Repo.GetMovieByID(id)
 }
 
 func (service *MovieService) CreateMovie(movie models.Movie) (models.Movie, error) {

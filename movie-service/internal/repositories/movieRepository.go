@@ -21,6 +21,14 @@ func (repo *MovieRepository) GetAllMovies() ([]models.Movie, error) {
 	return movies, nil
 }
 
+func (repo *MovieRepository) GetMovieByID(id string) (models.Movie, error) {
+	var movie models.Movie
+	if err := repo.DB.First(&movie, id).Error; err != nil {
+		return models.Movie{}, err
+	}
+	return movie, nil
+}
+
 func (repo *MovieRepository) CreateMovie(movie models.Movie) (models.Movie, error) {
 	result := repo.DB.Create(&movie)
 	if result.Error != nil {
