@@ -57,3 +57,28 @@ func (service *MovieService) CreateMovie(movie models.Movie) (models.Movie, erro
 
 	return service.Repo.CreateMovie(movie)
 }
+
+func (service *MovieService) UpdateMovie(id string, movie models.Movie) (models.Movie, error) {
+	m, err := service.Repo.GetMovieByID(id)
+	if err != nil {
+		return models.Movie{}, echo.NewHTTPError(http.StatusNotFound, "movie not found")
+	}
+
+	if movie.Title == "" {
+		movie.Title = m.Title
+	}
+	if movie.Description == "" {
+		movie.Description = m.Description
+	}
+	if movie.PosterImageUrl == "" {
+		movie.PosterImageUrl = m.PosterImageUrl
+	}
+	if movie.Genre == "" {
+		movie.Genre = m.Genre
+	}
+
+	movie.MovieId = m.MovieId
+	movie.CreatedAt = m.CreatedAt
+
+	return service.Repo.UpdateMovie(movie)
+}

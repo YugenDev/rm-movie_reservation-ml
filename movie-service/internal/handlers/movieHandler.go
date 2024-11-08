@@ -55,3 +55,19 @@ func (h *MovieHandler) CreateMovie(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, createdMovie)
 }
+
+func (h *MovieHandler) UpdateMovie(c echo.Context) error {
+	id := c.Param("movie_id")
+	var movie models.Movie
+	if err := c.Bind(&movie); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid movie data")
+	}
+
+	movie.MovieId = id
+	updatedMovie, err := h.Service.UpdateMovie(id, movie)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, updatedMovie)
+}

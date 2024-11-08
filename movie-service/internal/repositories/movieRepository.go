@@ -44,3 +44,11 @@ func (repo *MovieRepository) CreateMovie(movie models.Movie) (models.Movie, erro
 	}
 	return movie, nil
 }
+
+func (repo *MovieRepository) UpdateMovie(movie models.Movie) (models.Movie, error) {
+	result := repo.DB.Save(&movie)
+	if result.Error != nil {
+		return models.Movie{}, result.Error
+	}
+	return movie, nil
+}

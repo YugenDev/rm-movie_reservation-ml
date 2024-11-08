@@ -8,9 +8,11 @@ import (
 func RegisterMovieRoutes(e *echo.Echo, handler *handlers.MovieHandler) {
 
 	e.GET("/movies", handler.GetMovies)
-	e.GET("/movie/:id", handler.GetMovieByID)
+	e.GET("/movies/:id", handler.GetMovieByID)
 	e.GET("/movie/title/:title", handler.GetMovieByTitle)
 
 	e.POST("/movies", handler.CreateMovie)
+
+	e.PUT("/movies/:id", handler.UpdateMovie)
 
 }
