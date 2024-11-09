@@ -14,6 +14,8 @@ showtime_service/
 │   │   │               │   └── ShowtimeRepository.java
 │   │   │               ├── service/
 │   │   │               │   └── ShowtimeService.java
+│   │   │               ├── util/
+│   │   │               │   └── *.java
 │   │   │               └── config/
 │   │   │                   └── WebFluxConfig.java
 │   │   └── resources/
@@ -25,5 +27,6 @@ showtime_service/
 │               └── example/
 │                   └── showtime/
 │                       └── ShowtimeApplicationTests.java
-├── pom.xml
+├── build.gradle
+├── settings.gradle
 └── Dockerfile

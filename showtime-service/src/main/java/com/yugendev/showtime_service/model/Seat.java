@@ -1,5 +1,6 @@
 package com.yugendev.showtime_service.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,17 +13,15 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("showtimes")
-public class Showtime {
+@Table("seats")
+public class Seat {
 
     @Id
-    private UUID showtimeId;
+    private UUID seatId;
 
-    private UUID movieId;
-    private LocalDateTime showtimeDate;
-    private int capacity;
-    private int reservedSeats;
+    private UUID showtimeId;
+    private int seatNumber;
+    private boolean isReserved;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }
