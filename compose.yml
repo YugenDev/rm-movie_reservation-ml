@@ -20,6 +20,17 @@ services:
       - "5433:5432"
     networks:
       - mr-network
+  
+  showtime-db:
+    build: ./DB/showtime-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: showtimes
+    ports:
+      - "5434:5432"
+    networks:
+      - mr-network
 
   rabbitmq:
     build: ./rabbitMQ
@@ -64,6 +75,23 @@ services:
       - "8081:8081"
     depends_on:
       - movies-db
+      - rabbitmq
+    networks:
+      - mr-network
+
+  showtime-service:
+    build: ./showtime-service
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: showtimes
+      POSTGRES_SERVER: showtime-db
+      POSTGRES_PORT: 5432
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "8082:8082"
+    depends_on:
+      - showtime-db
       - rabbitmq
     networks:
       - mr-network
