@@ -33,7 +33,13 @@ public class ShowtimeController {
     }
 
     @GetMapping("/{id}")
-    public Mono<Showtime> getShowtimeById(@PathVariable UUID id) {
+    public Mono<Showtime> findShowtimeById(@PathVariable UUID id) {
         return showtimeService.getShowtimeById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> deleteShowtimeById(@PathVariable UUID id) {
+        return showtimeService.deleteShowtimeById(id);
     }
 }
