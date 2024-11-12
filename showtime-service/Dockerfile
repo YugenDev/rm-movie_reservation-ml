@@ -11,8 +11,8 @@ FROM eclipse-temurin:21.0.5_11-jre-ubi9-minimal
 
 WORKDIR /app
 
-COPY --from=builder /app/build/libs/showtime-service-0.0.1-SNAPSHOT.jar ./
+COPY --from=builder /app/build/libs/showtime-service.jar ./
 
 EXPOSE 8082
 
-CMD ["java", "-jar", "showtime-service-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "showtime-service.jar"]
