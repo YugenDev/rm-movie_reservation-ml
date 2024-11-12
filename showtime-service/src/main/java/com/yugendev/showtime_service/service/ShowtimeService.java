@@ -5,12 +5,17 @@ import com.yugendev.showtime_service.model.Showtime;
 import com.yugendev.showtime_service.repository.SeatRepository;
 import com.yugendev.showtime_service.repository.ShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
@@ -43,6 +48,43 @@ public class ShowtimeService {
         return seatRepository.findAllByShowtimeId(showtimeId);
     }
 
+    //TODO: IMPLEMENT THIS
+    public Mono<List<Seat>> reserveSeats(UUID showtimeId, List<String> seatNumbers) {
+        if (showtimeId == null || seatNumbers == null || seatNumbers.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Showtime ID and seat numbers must be provided");
+        }
+    
+        List<Mono<Seat>> seatReservations = seatNumbers.stream()
+                .map(seatNumber -> reserveSingleSeat(showtimeId, seatNumber))
+                .collect(Collectors.toList());
+    
+        return Mono.zip(seatReservations, seats -> {
+            return Arrays.stream(seats)
+                    .map(Seat.class::cast)
+                    .collect(Collectors.toList());
+        })
+        .onErrorMap(ex -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error reservando asientos", ex));
+    }    
+
+    public Mono<Seat> reserveSingleSeat(UUID showtimeId, String seatNumber) {
+        if (showtimeId == null || seatNumber == null || seatNumber.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Showtime ID and seat number must be provided");
+        }
+    
+        return seatRepository.findByShowtimeIdAndSeatNumber(showtimeId, seatNumber)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat not found for the given showtimeId and seatNumber")))
+                .flatMap(seat -> {
+                    if (seat.isReserved()) {
+                        return Mono.error(new ResponseStatusException(HttpStatus.CONFLICT, "Seat is already reserved"));
+                    }
+    
+                    seat.setReserved(true);
+                    return seatRepository.save(seat);
+                })
+                .onErrorResume(ex -> Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred when saving the seat", ex)));
+    }
+    
+    
     private Mono<Void> createSeatsForShowtime(Showtime showtime) {
         int capacity = showtime.getCapacity();
         String seatPrefix = "A";

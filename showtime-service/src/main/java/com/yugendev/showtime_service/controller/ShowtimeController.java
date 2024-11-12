@@ -43,6 +43,11 @@ public class ShowtimeController {
         return showtimeService.getAllSeats(id);
     }
 
+    @PostMapping("/{id}/seats/{seatNumber}/reserve")
+    public Mono<Seat> reserveSeat(@PathVariable UUID id, @PathVariable String seatNumber) {
+        return showtimeService.reserveSingleSeat(id, seatNumber);
+    }
+
     @GetMapping("/{id}")
     public Mono<Showtime> findShowtimeById(@PathVariable UUID id) {
         return showtimeService.getShowtimeById(id);
