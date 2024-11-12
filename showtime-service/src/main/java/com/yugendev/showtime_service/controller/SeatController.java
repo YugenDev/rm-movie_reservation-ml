@@ -2,6 +2,7 @@ package com.yugendev.showtime_service.controller;
 
 import com.yugendev.showtime_service.model.Seat;
 import com.yugendev.showtime_service.service.SeatService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class SeatController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Seat> createSeat(@RequestBody Seat seat) {
+    public Mono<Seat> createSeat(@Valid @RequestBody Seat seat) {
         return seatService.createSeat(seat);
     }
 
