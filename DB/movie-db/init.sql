@@ -1,12 +1,38 @@
-CREATE TABLE movies (
-    movie_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    title VARCHAR(255) NOT NULL,
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS movies (
+    movie_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),  
     description TEXT NOT NULL,
     poster_image_url VARCHAR(255),
     genre VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+CREATE INDEX IF NOT EXISTS idx_genre ON movies(genre);
+
+
+CREATE INDEX IF NOT EXISTS idx_created_at ON movies(created_at);
+
+
+CREATE INDEX IF NOT EXISTS idx_updated_at ON movies(updated_at);
+
+
+CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER update_movies_updated_at
+BEFORE UPDATE ON movies
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at();
+
 
 INSERT INTO movies (title, description, poster_image_url, genre)
 VALUES
