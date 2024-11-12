@@ -5,6 +5,7 @@
 ```bash
 docker-compose up --build
 ```
+(In case of failure when initilizating DBs, just run it again.)
 
 # Languages and Frameworks
 
