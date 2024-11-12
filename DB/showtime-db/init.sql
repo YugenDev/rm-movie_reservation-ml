@@ -54,12 +54,11 @@ CREATE TRIGGER update_seats_updated_at
     EXECUTE FUNCTION update_updated_at_column();
 
 
-INSERT INTO showtimes (movie_id, showtime_date, capacity, reserved_seats)
+INSERT INTO showtimes (showtime_id, movie_id, showtime_date, capacity, reserved_seats)
 VALUES 
-    ('550e8400-e29b-41d4-a716-446655440000', '2023-10-01 14:00:00', 100, 10),
-    ('550e8400-e29b-41d4-a716-446655440001', '2023-10-01 16:00:00', 150, 20),
-    ('550e8400-e29b-41d4-a716-446655440002', '2023-10-01 18:00:00', 200, 30);
-
+    ('550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', '2023-10-01 14:00:00', 100, 10),
+    ('550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', '2023-10-01 16:00:00', 150, 20),
+    ('550e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440002', '2023-10-01 18:00:00', 200, 30);
 
 INSERT INTO seats (showtime_id, seat_number, is_reserved)
 VALUES 
