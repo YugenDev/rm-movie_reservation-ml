@@ -35,6 +35,11 @@ public class ShowtimeService {
     }
 
     public Flux<Seat> getAvalibleSeats(UUID showtimeId) {
+        return seatRepository.findAllByShowtimeId(showtimeId)
+        .filter(seat -> !seat.isReserved());
+    }
+
+    public Flux<Seat> getAllSeats(UUID showtimeId) {
         return seatRepository.findAllByShowtimeId(showtimeId);
     }
 
