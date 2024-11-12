@@ -20,7 +20,7 @@ public class Seat {
     private UUID seatId;
 
     private UUID showtimeId;
-    private int seatNumber;
+    private String seatNumber;
     private boolean isReserved;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
