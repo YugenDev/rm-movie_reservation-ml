@@ -24,4 +24,14 @@ public class Seat {
     private boolean isReserved;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    // Used to make reservations
+    public Seat(UUID showtimeId, String seatNumber) {
+        this.showtimeId = showtimeId;
+        this.seatNumber = seatNumber;
+        this.isReserved = false;  
+        this.createdAt = LocalDateTime.now();  
+        this.updatedAt = this.createdAt;
+    }
+
 }
