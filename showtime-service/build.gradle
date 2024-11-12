@@ -5,7 +5,6 @@ plugins {
 }
 
 group = 'com.yugendev'
-version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
@@ -32,6 +31,10 @@ dependencies {
 
 	testCompileOnly 'org.projectlombok:lombok:1.18.34'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+}
+
+bootJar {
+    archiveBaseName = 'showtime-service'
 }
 
 tasks.named('test') {
