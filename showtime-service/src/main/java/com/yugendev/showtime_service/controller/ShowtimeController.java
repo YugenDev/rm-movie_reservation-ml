@@ -33,10 +33,15 @@ public class ShowtimeController {
         return showtimeService.getAllShowtimes();
     }
 
-    @GetMapping("/{id}/seats")
-    public Flux<Seat> getAvalibleSeats (@PathVariable UUID id) {
+    @GetMapping("/{id}/seats/avalible")
+    public Flux<Seat> getAvalibleSeats(@PathVariable UUID id) {
         return showtimeService.getAvalibleSeats(id)
         .filter(seat -> !seat.isReserved());
+    }
+
+    @GetMapping("/{id}/seats")
+    public Flux<Seat> getAllSeats(@PathVariable UUID id) {
+        return showtimeService.getAvalibleSeats(id);
     }
 
     @GetMapping("/{id}")
