@@ -1,5 +1,6 @@
 package com.yugendev.showtime_service.controller;
 
+import com.yugendev.showtime_service.model.Seat;
 import com.yugendev.showtime_service.model.Showtime;
 import com.yugendev.showtime_service.service.ShowtimeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,12 @@ public class ShowtimeController {
     @GetMapping
     public Flux<Showtime> getAllShowtimes() {
         return showtimeService.getAllShowtimes();
+    }
+
+    @GetMapping("/{id}/seats")
+    public Flux<Seat> getAvalibleSeats (@PathVariable UUID id) {
+        return showtimeService.getAvalibleSeats(id)
+        .filter(seat -> !seat.isReserved());
     }
 
     @GetMapping("/{id}")

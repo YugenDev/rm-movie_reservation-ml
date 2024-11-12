@@ -6,6 +6,7 @@ import com.yugendev.showtime_service.repository.SeatRepository;
 import com.yugendev.showtime_service.repository.ShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -33,10 +34,15 @@ public class ShowtimeService {
         return showtimeRepository.findById(id);
     }
 
+    public Flux<Seat> getAvalibleSeats(UUID showtimeId) {
+        return seatRepository.findAllByShowtimeId(showtimeId);
+    }
+
     private Mono<Void> createSeatsForShowtime(Showtime showtime) {
         int capacity = showtime.getCapacity();
         String seatPrefix = "A";
         // TODO: Implement more prefixes with specific limits
+        // and take this function to another module
     
         Flux<Seat> seats = Flux.fromStream(
             IntStream.range(1, capacity + 1)
