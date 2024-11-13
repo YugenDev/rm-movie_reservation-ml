@@ -32,6 +32,17 @@ services:
     networks:
       - mr-network
 
+  reservation-db:
+    build: ./DB/reservation-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: reservations
+    ports:
+      - "5435:5432"
+    networks:
+      - mr-network
+
   rabbitmq:
     build: ./rabbitMQ
     ports:
@@ -95,6 +106,26 @@ services:
       - "8082:8082"
     depends_on:
       - showtime-db
+      - rabbitmq
+    networks:
+      - mr-network
+  
+  reservation-service:
+    build: ./reservation-service
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: reservations
+      POSTGRES_SERVER: reservation-db
+      POSTGRES_PORT: 5432
+      RABBITMQ_SERVER: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASSWORD: guest
+    ports:
+      - "8083:8083"
+    depends_on:
+      - reservation-db
       - rabbitmq
     networks:
       - mr-network
