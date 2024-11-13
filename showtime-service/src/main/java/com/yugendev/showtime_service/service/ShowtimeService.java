@@ -18,8 +18,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class ShowtimeService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ShowtimeService.class);
 
     private final ShowtimeRepository showtimeRepository;
     private final SeatRepository seatRepository;
@@ -48,43 +53,111 @@ public class ShowtimeService {
         return seatRepository.findAllByShowtimeId(showtimeId);
     }
 
-    //TODO: IMPLEMENT THIS
+    // reserveSeats method
     public Mono<List<Seat>> reserveSeats(UUID showtimeId, List<String> seatNumbers) {
-        if (showtimeId == null || seatNumbers == null || seatNumbers.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Showtime ID and seat numbers must be provided");
+        logger.debug("Reserving seats for showtimeId: {} with seatNumbers: {}", showtimeId, seatNumbers);
+
+        // Input validation
+        if (showtimeId == null) {
+            return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Showtime ID must be provided"));
         }
-    
-        List<Mono<Seat>> seatReservations = seatNumbers.stream()
-                .map(seatNumber -> reserveSingleSeat(showtimeId, seatNumber))
-                .collect(Collectors.toList());
-    
-        return Mono.zip(seatReservations, seats -> {
-            return Arrays.stream(seats)
-                    .map(Seat.class::cast)
-                    .collect(Collectors.toList());
-        })
-        .onErrorMap(ex -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error reservando asientos", ex));
-    }    
+        if (seatNumbers == null || seatNumbers.isEmpty()) {
+            return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Seat numbers list cannot be empty"));
+        }
+
+        // Remove duplicates and validate seat number format
+        List<String> uniqueSeats = seatNumbers.stream()
+            .distinct()
+            .collect(Collectors.toList());
+
+        if (uniqueSeats.size() != seatNumbers.size()) {
+            return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+                "Duplicate seat numbers are not allowed in the reservation"));
+        }
+
+        // Validate seat number format
+        List<String> invalidSeats = uniqueSeats.stream()
+            .filter(seatNum -> !seatNum.matches("^[A-Z]\\d+$"))
+            .collect(Collectors.toList());
+
+        if (!invalidSeats.isEmpty()) {
+            return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+                "Invalid seat number format for seats: " + String.join(", ", invalidSeats)));
+        }
+
+        return showtimeRepository.findById(showtimeId)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, 
+                "Showtime with ID " + showtimeId + " not found")))
+            .flatMap(showtime -> 
+                seatRepository.findAllByShowtimeIdAndSeatNumberIn(showtimeId, uniqueSeats)
+                    .collectList()
+                    .flatMap(seats -> {
+                        if (seats.size() != uniqueSeats.size()) {
+                            List<String> foundSeats = seats.stream()
+                                .map(Seat::getSeatNumber)
+                                .collect(Collectors.toList());
+                            List<String> notFoundSeats = uniqueSeats.stream()
+                                .filter(seat -> !foundSeats.contains(seat))
+                                .collect(Collectors.toList());
+                            return Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, 
+                                "Seats not found: " + String.join(", ", notFoundSeats)));
+                        }
+
+                        List<Seat> reservedSeats = seats.stream()
+                            .filter(Seat::isReserved)
+                            .collect(Collectors.toList());
+
+                        if (!reservedSeats.isEmpty()) {
+                            String reservedSeatNumbers = reservedSeats.stream()
+                                .map(Seat::getSeatNumber)
+                                .collect(Collectors.joining(", "));
+                            return Mono.error(new ResponseStatusException(HttpStatus.CONFLICT, 
+                                "Cannot complete reservation. Seats already reserved: " + reservedSeatNumbers));
+                        }
+
+                        return seatRepository.saveAll(seats.stream()
+                            .peek(seat -> seat.setReserved(true))
+                            .collect(Collectors.toList()))
+                            .collectList();
+                    })
+            )
+            .onErrorMap(ex -> {
+                if (ex instanceof ResponseStatusException) {
+                    return ex;
+                }
+                logger.error("Unexpected error during seat reservation", ex);
+                return new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, 
+                    "An unexpected error occurred while processing your reservation");
+            });
+    }
 
     public Mono<Seat> reserveSingleSeat(UUID showtimeId, String seatNumber) {
-        if (showtimeId == null || seatNumber == null || seatNumber.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Showtime ID and seat number must be provided");
+        logger.debug("Reserving single seat for showtimeId: {} with seatNumber: {}", showtimeId, seatNumber);
+
+        if (showtimeId == null || seatNumber == null || !seatNumber.matches("^[A-Z]\\d+$")) {
+            return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid showtime ID or seat number format"));
         }
-    
-        return seatRepository.findByShowtimeIdAndSeatNumber(showtimeId, seatNumber)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat not found for the given showtimeId and seatNumber")))
-                .flatMap(seat -> {
-                    if (seat.isReserved()) {
-                        return Mono.error(new ResponseStatusException(HttpStatus.CONFLICT, "Seat is already reserved"));
-                    }
-    
-                    seat.setReserved(true);
-                    return seatRepository.save(seat);
-                })
-                .onErrorResume(ex -> Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred when saving the seat", ex)));
+
+        return showtimeRepository.findById(showtimeId)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Showtime not found")))
+            .flatMap(showtime -> 
+                seatRepository.findByShowtimeIdAndSeatNumber(showtimeId, seatNumber)
+                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat not found")))
+                    .flatMap(seat -> {
+                        if (seat.isReserved()) {
+                            return Mono.error(new ResponseStatusException(HttpStatus.CONFLICT, "Seat is already reserved"));
+                        }
+                        seat.setReserved(true);
+                        return seatRepository.save(seat);
+                    })
+            )
+            .onErrorMap(ex -> {
+                logger.error("Error in single seat reservation", ex);
+                return (ex instanceof ResponseStatusException) ? ex :
+                    new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Reservation failed", ex);
+            });
     }
-    
-    
+
     private Mono<Void> createSeatsForShowtime(Showtime showtime) {
         int capacity = showtime.getCapacity();
         String seatPrefix = "A";
