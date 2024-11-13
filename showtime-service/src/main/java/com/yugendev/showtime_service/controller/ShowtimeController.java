@@ -1,5 +1,6 @@
 package com.yugendev.showtime_service.controller;
 
+import com.yugendev.showtime_service.controller.dto.SeatReservationRequest;
 import com.yugendev.showtime_service.model.Seat;
 import com.yugendev.showtime_service.model.Showtime;
 import com.yugendev.showtime_service.service.ShowtimeService;
@@ -9,11 +10,17 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/showtimes")
 public class ShowtimeController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ShowtimeController.class);
 
     private final ShowtimeService showtimeService;
 
@@ -43,9 +50,10 @@ public class ShowtimeController {
         return showtimeService.getAllSeats(id);
     }
 
-    @PostMapping("/{id}/seats/{seatNumber}/reserve")
-    public Mono<Seat> reserveSeat(@PathVariable UUID id, @PathVariable String seatNumber) {
-        return showtimeService.reserveSingleSeat(id, seatNumber);
+    @PostMapping("/{id}/seats/reserve")
+    public Mono<List<Seat>> reserveSeat(@PathVariable UUID id, @RequestBody SeatReservationRequest seatNumbers) {
+        logger.debug("Received request to reserve seats for showtimeId: {} with seatNumbers: {}", id, seatNumbers);
+        return showtimeService.reserveSeats(id, seatNumbers.getSeatNumbers());
     }
 
     @GetMapping("/{id}")
