@@ -1,0 +1,23 @@
+micronaut:
+  application:
+    name: reservation-service
+
+datasources:
+  default:
+    url: jdbc:postgresql://${POSTGRES_SERVER}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driverClassName: org.postgresql.Driver
+
+r2dbc:
+  datasources:
+    default:
+      url: r2dbc:postgresql://${POSTGRES_SERVER}:${POSTGRES_PORT}/${POSTGRES_DB}
+      username: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+
+rabbitmq:
+  uri: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@${RABBITMQ_SERVER}:${RABBITMQ_PORT}
+
+server:
+  port: 8083
