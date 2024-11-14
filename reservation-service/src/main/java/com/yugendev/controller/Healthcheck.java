@@ -3,10 +3,10 @@ package com.yugendev.controller;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 
-@Controller
+@Controller("/healthcheck")
 public class Healthcheck {
 
-    @Get("/healthcheck")
+    @Get(produces = "text/plain")
     public String healthcheck() {
         return "Reservation Service is up!!! 🎫🚀";
     }
