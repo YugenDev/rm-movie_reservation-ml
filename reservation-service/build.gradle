@@ -28,6 +28,7 @@ dependencies {
     compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.postgresql:r2dbc-postgresql")
+    runtimeOnly("org.yaml:snakeyaml")
     testImplementation("io.micronaut:micronaut-http-client")
     testResourcesService("org.postgresql:postgresql")
 }
@@ -36,6 +37,8 @@ dependencies {
 application {
     mainClass = "com.yugendev.Application"
 }
+
+
 java {
     sourceCompatibility = JavaVersion.toVersion("21")
     targetCompatibility = JavaVersion.toVersion("21")
@@ -63,11 +66,14 @@ micronaut {
         optimizeNetty = true
         replaceLogbackXml = true
     }
+    version = '4.4.2'
+}
+
+jar {
+    archiveBaseName = 'reservation-service'  
 }
 
 
 tasks.named("dockerfileNative") {
     jdkVersion = "21"
 }
-
-
