@@ -2,22 +2,24 @@ micronaut:
   application:
     name: reservation-service
 
-datasources:
-  default:
-    url: jdbc:postgresql://${POSTGRES_SERVER}:${POSTGRES_PORT}/${POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    driverClassName: org.postgresql.Driver
+  r2dbc:
+    datasources:
+      default:
+        url: r2dbc:postgresql://${POSTGRES_SERVER:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:reservations}
+        username: ${POSTGRES_USER:admin}
+        password: ${POSTGRES_PASSWORD:admin123}
+        driver: postgres
+        max-size: 10
 
-r2dbc:
-  datasources:
-    default:
-      url: r2dbc:postgresql://${POSTGRES_SERVER}:${POSTGRES_PORT}/${POSTGRES_DB}
-      username: ${POSTGRES_USER}
-      password: ${POSTGRES_PASSWORD}
+  rabbitmq:
+    uri: amqp://${RABBITMQ_USER:guest}:${RABBITMQ_PASSWORD:guest}@${RABBITMQ_SERVER:localhost}:${RABBITMQ_PORT:5672}
 
-rabbitmq:
-  uri: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@${RABBITMQ_SERVER}:${RABBITMQ_PORT}
+  server:
+    port: 8083
+    rx:
+      enabled: true
 
-server:
-  port: 8083
+  logging:
+    level:
+      io.micronaut: DEBUG
+      org.springframework: INFO
