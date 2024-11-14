@@ -13,28 +13,24 @@ repositories {
 }
 
 dependencies {
+    annotationProcessor("org.projectlombok:lombok")
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor("io.micronaut:micronaut-http-validation")
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
-    implementation("com.ongres.scram:client:2.1")
-    implementation("io.micronaut:micronaut-http-client")
-    implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
+    implementation("io.micrometer:context-propagation")
+    implementation("io.micronaut.data:micronaut-data-r2dbc")
+    implementation("io.micronaut.r2dbc:micronaut-r2dbc-core")
+    implementation("io.micronaut.rabbitmq:micronaut-rabbitmq")
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation("io.micronaut.sql:micronaut-hibernate-reactive")
-    implementation("io.micronaut.rabbitmq:micronaut-rabbitmq")
-
     compileOnly("io.micronaut:micronaut-http-client")
-
+    compileOnly("org.projectlombok:lombok")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.postgresql:r2dbc-postgresql")
     runtimeOnly("org.yaml:snakeyaml")
-
     testImplementation("io.micronaut:micronaut-http-client")
     testResourcesService("org.postgresql:postgresql")
 }
-
-
 
 application {
     mainClass = "com.yugendev.Application"

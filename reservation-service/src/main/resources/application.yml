@@ -10,14 +10,14 @@ micronaut:
         password: ${POSTGRES_PASSWORD:admin123}
         driver: postgres
         max-size: 10
+  jpa:
+    enabled: false
 
   rabbitmq:
     uri: amqp://${RABBITMQ_USER:guest}:${RABBITMQ_PASSWORD:guest}@${RABBITMQ_SERVER:localhost}:${RABBITMQ_PORT:5672}
 
   server:
     port: 8083
-    rx:
-      enabled: true
 
   logging:
     level:
