@@ -1,19 +1,29 @@
-## Micronaut 4.6.3 Documentation
+## Micronaut 4.7.0 Documentation
 
-- [User Guide](https://docs.micronaut.io/4.6.3/guide/index.html)
-- [API Reference](https://docs.micronaut.io/4.6.3/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/4.6.3/guide/configurationreference.html)
+- [User Guide](https://docs.micronaut.io/4.7.0/guide/index.html)
+- [API Reference](https://docs.micronaut.io/4.7.0/api/index.html)
+- [Configuration Reference](https://docs.micronaut.io/4.7.0/guide/configurationreference.html)
 - [Micronaut Guides](https://guides.micronaut.io/index.html)
 ---
 
 - [Micronaut Gradle Plugin documentation](https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/)
 - [GraalVM Gradle Plugin documentation](https://graalvm.github.io/native-build-tools/latest/gradle-plugin.html)
 - [Shadow Gradle Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
-## Feature r2dbc documentation
+## Feature serialization-jackson documentation
 
-- [Micronaut R2DBC documentation](https://micronaut-projects.github.io/micronaut-r2dbc/latest/guide/)
+- [Micronaut Serialization Jackson Core documentation](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/)
 
-- [https://r2dbc.io](https://r2dbc.io)
+
+## Feature lombok documentation
+
+- [Micronaut Project Lombok documentation](https://docs.micronaut.io/latest/guide/index.html#lombok)
+
+- [https://projectlombok.org/features/all](https://projectlombok.org/features/all)
+
+
+## Feature test-resources documentation
+
+- [Micronaut Test Resources documentation](https://micronaut-projects.github.io/micronaut-test-resources/latest/guide/)
 
 
 ## Feature micronaut-aot documentation
@@ -28,28 +38,20 @@
 - [https://r2dbc.io](https://r2dbc.io)
 
 
-## Feature validation documentation
+## Feature reactor documentation
 
-- [Micronaut Validation documentation](https://micronaut-projects.github.io/micronaut-validation/latest/guide/)
-
-
-## Feature hibernate-jpa documentation
-
-- [Micronaut Hibernate JPA documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#hibernate)
+- [Micronaut Reactor documentation](https://micronaut-projects.github.io/micronaut-reactor/snapshot/guide/index.html)
 
 
-## Feature jdbc-hikari documentation
+## Feature rabbitmq documentation
 
-- [Micronaut Hikari JDBC Connection Pool documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#jdbc)
-
-
-## Feature test-resources documentation
-
-- [Micronaut Test Resources documentation](https://micronaut-projects.github.io/micronaut-test-resources/latest/guide/)
+- [Micronaut RabbitMQ Messaging documentation](https://micronaut-projects.github.io/micronaut-rabbitmq/latest/guide/index.html)
 
 
-## Feature serialization-jackson documentation
+## Feature r2dbc documentation
 
-- [Micronaut Serialization Jackson Core documentation](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/)
+- [Micronaut R2DBC documentation](https://micronaut-projects.github.io/micronaut-r2dbc/latest/guide/)
+
+- [https://r2dbc.io](https://r2dbc.io)
 
 
