@@ -32,10 +32,10 @@ dependencies {
     testResourcesService("org.postgresql:postgresql")
 }
 
-
 application {
     mainClass = "com.yugendev.Application"
 }
+
 java {
     sourceCompatibility = JavaVersion.toVersion("21")
     targetCompatibility = JavaVersion.toVersion("21")
@@ -66,8 +66,8 @@ micronaut {
         optimizeNetty = true
         replaceLogbackXml = true
     }
+    version = "$micronautVersion"
 }
-
 
 tasks.named("dockerfileNative") {
     jdkVersion = "21"
