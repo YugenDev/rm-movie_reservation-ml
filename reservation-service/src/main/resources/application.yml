@@ -2,18 +2,16 @@ micronaut:
   application:
     name: reservation
 
-  data:
-    r2dbc:
-      datasources:
-        default:
-          schema-generate: CREATE_DROP
-          dialect: POSTGRES
-          db-type: postgres
-          url: r2dbc:postgresql://${POSTGRES_SERVER:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:reservations}
-          username: ${POSTGRES_USER:admin}
-          password: ${POSTGRES_PASSWORD:admin123}
-          driver: postgres
 
+r2dbc:
+  datasources:
+    default:
+      schema-generate: CREATE_DROP
+      dialect: POSTGRES
+      db-type: postgres
+      url: r2dbc:postgresql://${POSTGRES_SERVER:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:reservations}
+      username: ${POSTGRES_USER:admin}
+      password: ${POSTGRES_PASSWORD:admin123}
 
   rabbitmq:
     uri: amqp://${RABBITMQ_USER:guest}:${RABBITMQ_PASSWORD:guest}@${RABBITMQ_SERVER:localhost}:${RABBITMQ_PORT:5672}

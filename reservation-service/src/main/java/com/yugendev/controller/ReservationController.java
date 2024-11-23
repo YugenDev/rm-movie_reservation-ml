@@ -12,8 +12,11 @@ import java.util.UUID;
 @Controller("/reservations")
 public class ReservationController {
 
-    @Inject
-    private ReservationService reservationService;
+    private final ReservationService reservationService;
+
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    } 
 
     @Get("/user/{userId}")
     public Flux<Reservation> findByUserId(UUID userId) {
