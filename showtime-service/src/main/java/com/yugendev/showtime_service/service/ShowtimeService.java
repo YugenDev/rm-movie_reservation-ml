@@ -4,6 +4,7 @@ import com.yugendev.showtime_service.model.Seat;
 import com.yugendev.showtime_service.model.Showtime;
 import com.yugendev.showtime_service.repository.SeatRepository;
 import com.yugendev.showtime_service.repository.ShowtimeRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,12 +29,14 @@ public class ShowtimeService {
 
     private final ShowtimeRepository showtimeRepository;
     private final SeatRepository seatRepository;
+    private final RabbitTemplate rabbitTemplate;
 
 
     @Autowired
-    public ShowtimeService(ShowtimeRepository showtimeRepository, SeatRepository seatRepository) {
+    public ShowtimeService(ShowtimeRepository showtimeRepository, SeatRepository seatRepository, RabbitTemplate rabbitTemplate) {
         this.showtimeRepository = showtimeRepository;
         this.seatRepository = seatRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public Flux<Showtime> getAllShowtimes() {
@@ -119,7 +122,10 @@ public class ShowtimeService {
     public Mono<Showtime> createShowtime(Showtime showtime) {
         return showtimeRepository.save(showtime)
                 .flatMap(savedShowtime -> createSeatsForShowtime(savedShowtime)
-                        .then(Mono.just(savedShowtime)));
+                        .then(Mono.just(savedShowtime)))
+                .doOnSuccess(savedShowtime ->
+                        rabbitTemplate.convertAndSend("showtimeExchange", "showtime", savedShowtime)
+                );
     }
 
     public Mono<Void> deleteShowtimeById(UUID id) {
