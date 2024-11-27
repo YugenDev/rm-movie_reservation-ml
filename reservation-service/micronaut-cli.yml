@@ -1,6 +1,0 @@
-applicationType: default
-defaultPackage: com.yugendev
-testFramework: junit
-sourceLanguage: java
-buildTool: gradle
-features: [app-name, data, data-r2dbc, gradle, http-client-test, java, java-application, junit, logback, lombok, micronaut-aot, micronaut-build, micronaut-http-validation, netty-server, postgres, r2dbc, rabbitmq, reactor, reactor-http-client, readme, serialization-jackson, shade, static-resources, test-resources, yaml, yaml-build]
