@@ -118,10 +118,7 @@ services:
       POSTGRES_DB: reservations
       POSTGRES_SERVER: reservation-db
       POSTGRES_PORT: 5432
-      RABBITMQ_SERVER: rabbitmq
-      RABBITMQ_PORT: 5672
-      RABBITMQ_USER: guest
-      RABBITMQ_PASSWORD: guest
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
     ports:
       - "8083:8083"
     depends_on:
