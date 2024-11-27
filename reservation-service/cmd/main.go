@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/YugenDev/rm-movie_reservation-ml/internal/config"
+	"github.com/YugenDev/rm-movie_reservation-ml/internal/services/broker_service"
 	"github.com/labstack/echo/v4"
 )
 
@@ -11,6 +12,8 @@ func main() {
 		panic(err)
 	}
 	defer config.CloseDB(db)
+
+	broker_service.StartConsumers()
 
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
