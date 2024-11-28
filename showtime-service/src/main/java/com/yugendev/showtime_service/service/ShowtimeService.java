@@ -16,7 +16,6 @@ import reactor.core.publisher.Mono;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -99,25 +98,26 @@ public class ShowtimeService {
             );
     }
 
-    private Mono<Void> createSeatsForShowtime(Showtime showtime) {
-        int capacity = showtime.getCapacity();
-        String seatPrefix = "A";
-        // TODO: Implement more prefixes with specific limits
-        // and take this function to another module
-    
-        Flux<Seat> seats = Flux.fromStream(
-            IntStream.range(1, capacity + 1)
-                .mapToObj(i -> {
-                    Seat seat = new Seat();
-                    seat.setShowtimeId(showtime.getShowtimeId());
-                    seat.setSeatNumber(seatPrefix + i);  
-                    seat.setReserved(false);  
-                    return seat;
-                })
-        );
-    
-        return seatRepository.saveAll(seats).then();
-    }
+private Mono<Void> createSeatsForShowtime(Showtime showtime) {
+    List<String> seatPrefixes = Arrays.asList("A", "B", "C", "D", "E", "F", "G");
+
+    Flux<Seat> seats = Flux.fromStream(
+        IntStream.range(0, seatPrefixes.size())
+            .boxed()
+            .flatMap(prefixIndex ->
+                IntStream.range(1, 11)
+                    .mapToObj(i -> {
+                        Seat seat = new Seat();
+                        seat.setShowtimeId(showtime.getShowtimeId());
+                        seat.setSeatNumber(seatPrefixes.get(prefixIndex) + i);
+                        seat.setReserved(false);
+                        return seat;
+                    })
+            )
+    );
+
+    return seatRepository.saveAll(seats).then();
+}
 
     public Mono<Showtime> createShowtime(Showtime showtime) {
         return showtimeRepository.save(showtime)
