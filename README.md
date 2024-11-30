@@ -10,13 +10,13 @@ docker-compose up --build
 # Languages and Frameworks
 
 ### 1. **User Service**
-- **Language/Framework**: FastAPI (Python)
+- **Language/Framework**: Python (fastAPI)
 
 ### 2. **Movie Service**
 - **Language/Framework**: Go (Echo)
 
 ### 3. **Showtime Service**
-- **Language/Framework**: Spring WebFlux (Java)
+- **Language/Framework**: Java (Spring Webflux)
 
 ### 4. **Reservation Service**
-- **Language/Framework**: Micronaut (Java)
+- **Language/Framework**: Go (Echo)

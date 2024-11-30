@@ -132,7 +132,6 @@ private Mono<Void> createSeatsForShowtime(Showtime showtime) {
         return showtimeRepository.deleteById(id);
     }
 
-    // update a showtime
     public Mono<Showtime> updateShowtime(UUID id, Showtime showtime) {
         return showtimeRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Showtime not found")))
