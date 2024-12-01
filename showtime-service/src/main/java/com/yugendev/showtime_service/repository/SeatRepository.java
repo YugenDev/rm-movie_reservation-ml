@@ -18,4 +18,6 @@ public interface SeatRepository extends ReactiveCrudRepository<Seat, UUID> {
     Flux<Seat> findAllByShowtimeId(UUID showtimeId);
 
     Flux<Seat> findAllByShowtimeIdAndSeatNumberIn(UUID showtimeId, List<String> seatNumbers);
+
+    Mono<Void> deleteByShowtimeIdAndSeatNumber(UUID showtimeId, String seatNumber);
 }
