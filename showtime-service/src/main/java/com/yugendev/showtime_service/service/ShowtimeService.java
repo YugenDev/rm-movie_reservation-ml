@@ -76,48 +76,26 @@ public class ShowtimeService {
             });
     }
 
-    public Mono<Seat> reserveSingleSeat(UUID showtimeId, String seatNumber) {
-        logger.debug("Reserving single seat for showtimeId: {} with seatNumber: {}", showtimeId, seatNumber);
-    
-        if (showtimeId == null || seatNumber == null || !seatNumber.matches("^[A-Z]\\d+$")) {
-            return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid showtime ID or seat number format"));
-        }
-    
-        return showtimeRepository.findById(showtimeId)
-            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Showtime not found")))
-            .flatMap(showtime -> 
-                seatRepository.findByShowtimeIdAndSeatNumber(showtimeId, seatNumber)
-                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat not found")))
-                    .flatMap(seat -> {
-                        if (seat.isReserved()) {
-                            return Mono.error(new ResponseStatusException(HttpStatus.CONFLICT, "Seat is already reserved"));
-                        }
-                        seat.setReserved(true);
-                        return seatRepository.save(seat);
-                    })
-            );
+    private Mono<Void> createSeatsForShowtime(Showtime showtime) {
+        List<String> seatPrefixes = Arrays.asList("A", "B", "C", "D", "E", "F", "G");
+
+        Flux<Seat> seats = Flux.fromStream(
+            IntStream.range(0, seatPrefixes.size())
+                .boxed()
+                .flatMap(prefixIndex ->
+                    IntStream.range(1, 11)
+                        .mapToObj(i -> {
+                            Seat seat = new Seat();
+                            seat.setShowtimeId(showtime.getShowtimeId());
+                            seat.setSeatNumber(seatPrefixes.get(prefixIndex) + i);
+                            seat.setReserved(false);
+                            return seat;
+                        })
+                )
+        );
+
+        return seatRepository.saveAll(seats).then();
     }
-
-private Mono<Void> createSeatsForShowtime(Showtime showtime) {
-    List<String> seatPrefixes = Arrays.asList("A", "B", "C", "D", "E", "F", "G");
-
-    Flux<Seat> seats = Flux.fromStream(
-        IntStream.range(0, seatPrefixes.size())
-            .boxed()
-            .flatMap(prefixIndex ->
-                IntStream.range(1, 11)
-                    .mapToObj(i -> {
-                        Seat seat = new Seat();
-                        seat.setShowtimeId(showtime.getShowtimeId());
-                        seat.setSeatNumber(seatPrefixes.get(prefixIndex) + i);
-                        seat.setReserved(false);
-                        return seat;
-                    })
-            )
-    );
-
-    return seatRepository.saveAll(seats).then();
-}
 
     public Mono<Showtime> createShowtime(Showtime showtime) {
         return showtimeRepository.save(showtime)
