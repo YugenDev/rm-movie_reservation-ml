@@ -20,8 +20,6 @@ import org.slf4j.LoggerFactory;
 @RequestMapping("/showtimes")
 public class ShowtimeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShowtimeController.class);
-
     private final ShowtimeService showtimeService;
 
     @Autowired
@@ -50,15 +48,14 @@ public class ShowtimeController {
         return showtimeService.getAllSeats(id);
     }
 
-    @PostMapping("/{id}/seats/reserve")
-    public Mono<List<Seat>> reserveSeat(@PathVariable UUID id, @RequestBody SeatReservationRequest seatNumbers) {
-        logger.debug("Received request to reserve seats for showtimeId: {} with seatNumbers: {}", id, seatNumbers);
-        return showtimeService.reserveSeats(id, seatNumbers.getSeatNumbers());
-    }
-
     @GetMapping("/{id}")
     public Mono<Showtime> findShowtimeById(@PathVariable UUID id) {
         return showtimeService.getShowtimeById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Mono<Showtime> updateShowtime(@PathVariable UUID id,@RequestBody Showtime showtime) {
+        return showtimeService.updateShowtime(id, showtime);
     }
 
     @DeleteMapping("/{id}")
@@ -66,4 +63,5 @@ public class ShowtimeController {
     public Mono<Void> deleteShowtimeById(@PathVariable UUID id) {
         return showtimeService.deleteShowtimeById(id);
     }
+
 }
