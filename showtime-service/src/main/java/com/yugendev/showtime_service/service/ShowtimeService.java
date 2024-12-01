@@ -24,8 +24,6 @@ import org.slf4j.LoggerFactory;
 @Service
 public class ShowtimeService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShowtimeService.class);
-
     private final ShowtimeRepository showtimeRepository;
     private final SeatRepository seatRepository;
     private final RabbitTemplate rabbitTemplate;
@@ -53,27 +51,6 @@ public class ShowtimeService {
 
     public Flux<Seat> getAllSeats(UUID showtimeId) {
         return seatRepository.findAllByShowtimeId(showtimeId);
-    }
-
-    public Mono<List<Seat>> reserveSeats(UUID showtimeId, List<String> seatNumbers) {
-        return seatRepository.findAllByShowtimeIdAndSeatNumberIn(showtimeId, seatNumbers)
-            .filter(seat -> !seat.isReserved())
-            .collectList()
-            .flatMap(seats -> {
-                if (seats.size() != seatNumbers.size()) {
-                    return Mono.error(new ResponseStatusException(HttpStatus.CONFLICT, "Some seats are already reserved"));
-                }
-                seats.forEach(seat -> seat.setReserved(true));
-                return seatRepository.saveAll(seats).collectList();
-            })
-            .onErrorMap(ex -> {
-                if (ex instanceof ResponseStatusException) {
-                    return ex;
-                }
-                logger.error("Unexpected error during seat reservation", ex);
-                return new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, 
-                    "An unexpected error occurred while processing your reservation");
-            });
     }
 
     private Mono<Void> createSeatsForShowtime(Showtime showtime) {
