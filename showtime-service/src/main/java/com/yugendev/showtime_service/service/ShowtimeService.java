@@ -83,10 +83,12 @@ public class ShowtimeService {
                 );
     }
 
+    // TODO: Implement rabbitmq message
     public Mono<Void> deleteShowtimeById(UUID id) {
         return showtimeRepository.deleteById(id);
     }
 
+    // TODO: Implement rabbitmq message
     public Mono<Showtime> updateShowtime(UUID id, Showtime showtime) {
         return showtimeRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Showtime not found")))
