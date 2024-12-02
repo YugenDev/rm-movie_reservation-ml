@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,8 +32,8 @@ public class SeatController {
     }
 
     @PostMapping("/{showtimeId}/{seatNumber}/reserve")
-    public Mono<Seat> reserveSeat(@PathVariable UUID showtimeId, @PathVariable String seatNumber) {
-        return seatService.reserveSeat(showtimeId, seatNumber);
+    public Mono<List<Seat>> reserveSeat(@PathVariable UUID showtimeId, @PathVariable List<String> seatNumber) {
+        return seatService.reserveSeats(showtimeId, seatNumber);
     }
 
     @DeleteMapping("/{showtimeId}/{seatNumber}")
