@@ -71,6 +71,10 @@ public class SeatService {
                 }
                 seat.setReserved(false);
                 return seatRepository.save(seat);
+            })
+            .doOnSuccess(seat -> {
+                logger.info("Successfully unreserved seat: {}", seat);
+                rabbitTemplate.convertAndSend("seat-reservation-exchange", "seat-reservation-deleted", seat);
             });
     }
 
