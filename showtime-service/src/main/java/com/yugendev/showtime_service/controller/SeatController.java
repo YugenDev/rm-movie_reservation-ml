@@ -21,27 +21,27 @@ public class SeatController {
         this.seatService = seatService;
     }
 
-    @GetMapping("/{showtimeId}")
+    @GetMapping("/showtime/{showtimeId}")
     public Flux<Seat> getSeatsByShowtimeId(@PathVariable UUID showtimeId) {
         return seatService.getSeatsByShowtimeId(showtimeId);
     }
 
-    @GetMapping("/{showtimeId}/{seatNumber}")
+    @GetMapping("/showtime/{showtimeId}/seat/{seatNumber}")
     public Mono<Seat> getSeatByShowtimeIdAndSeatNumber(@PathVariable UUID showtimeId, @PathVariable String seatNumber) {
         return seatService.getSeatByShowtimeIdAndSeatNumber(showtimeId, seatNumber);
     }
 
-    @PostMapping("/{showtimeId}/{seatNumber}/reserve")
+    @PostMapping("/showtime/{showtimeId}/seat/{seatNumber}/reserve")
     public Mono<List<Seat>> reserveSeat(@PathVariable UUID showtimeId, @PathVariable List<String> seatNumber) {
         return seatService.reserveSeats(showtimeId, seatNumber);
     }
 
-    @DeleteMapping("/{showtimeId}/{seatNumber}")
+    @DeleteMapping("/showtime/{showtimeId}/seat/{seatNumber}")
     public Mono<Void> deleteSeat(@PathVariable UUID showtimeId, @PathVariable String seatNumber) {
         return seatService.deleteSeat(showtimeId, seatNumber);
     }
 
-    @PutMapping("/{showtimeId}/{seatNumber}/unreserve")
+    @PutMapping("/showtime/{showtimeId}/seat/{seatNumber}/unreserve")
     public Mono<Seat> unreserveSeat(@PathVariable UUID showtimeId, @PathVariable String seatNumber) {
         return seatService.unreservedSeat(showtimeId, seatNumber);
     }
