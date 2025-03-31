@@ -16,6 +16,8 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.UUID;
 
+import static com.yugendev.showtime_service.utils.constants.Exchanges.SEAT_RESERVATION_EXCHANGE;
+
 @Service
 public class SeatService {
 
@@ -51,7 +53,7 @@ public class SeatService {
                 })
                 .doOnSuccess(seats -> {
                     logger.info("Successfully reserved seats: {}", seats);
-                    rabbitTemplate.convertAndSend("seat-reservation-exchange", "seat-reservation-created", seats);
+                    rabbitTemplate.convertAndSend(String.valueOf(SEAT_RESERVATION_EXCHANGE), "seat-reservation-created", seats);
                 })
                 .onErrorMap(ex -> {
                     if (ex instanceof ResponseStatusException) {
@@ -74,7 +76,7 @@ public class SeatService {
             })
             .doOnSuccess(seat -> {
                 logger.info("Successfully unreserved seat: {}", seat);
-                rabbitTemplate.convertAndSend("seat-reservation-exchange", "seat-reservation-unreserved", seat);
+                rabbitTemplate.convertAndSend(String.valueOf(SEAT_RESERVATION_EXCHANGE), "seat-reservation-unreserved", seat);
             });
     }
 
@@ -82,7 +84,7 @@ public class SeatService {
         return seatRepository.deleteByShowtimeIdAndSeatNumber(showtimeId, seatNumber)
                 .doOnSuccess(aVoid -> {
                     logger.info("Successfully deleted seat with number {} for showtime {}", seatNumber, showtimeId);
-                    rabbitTemplate.convertAndSend("seat-reservation-exchange", "seat-reservation-deleted", seatNumber);
+                    rabbitTemplate.convertAndSend(String.valueOf(SEAT_RESERVATION_EXCHANGE), "seat-reservation-deleted", seatNumber);
                 })
                 .doOnError(ex -> logger.error("Error deleting seat with number {} for showtime {}: {}", seatNumber, showtimeId, ex.getMessage()));
     }
