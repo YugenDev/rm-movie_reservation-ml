@@ -21,6 +21,8 @@ import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.yugendev.showtime_service.utils.constants.Exchanges.SHOWTIME_EXCHANGE;
+
 @Service
 public class ShowtimeService {
 
@@ -79,7 +81,7 @@ public class ShowtimeService {
                 .flatMap(savedShowtime -> createSeatsForShowtime(savedShowtime)
                         .then(Mono.just(savedShowtime)))
                 .doOnSuccess(savedShowtime ->
-                        rabbitTemplate.convertAndSend("showtimeExchange", "showtime", savedShowtime)
+                        rabbitTemplate.convertAndSend(String.valueOf(SHOWTIME_EXCHANGE), "showtime", savedShowtime)
                 );
     }
 

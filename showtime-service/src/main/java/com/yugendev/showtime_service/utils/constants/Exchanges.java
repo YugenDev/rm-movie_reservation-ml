@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum Exchanges {
 
-    SEAT_RESERVATION_EXCHANGE("seat-reservation-exchange"),;
+    SEAT_RESERVATION_EXCHANGE("seat-reservation-exchange"),
+    SHOWTIME_EXCHANGE("showtime-exchange"),;
 
     private final String value;
 
