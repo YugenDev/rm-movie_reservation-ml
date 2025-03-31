@@ -1,0 +1,503 @@
+{
+	"info": {
+		"_postman_id": "2a6ef8f4-ac03-408a-81cc-41a240694d42",
+		"name": "movie system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30801925"
+	},
+	"item": [
+		{
+			"name": "Services",
+			"item": [
+				{
+					"name": "Movie service",
+					"item": [
+						{
+							"name": "CRUD",
+							"item": [
+								{
+									"name": "Get all movies",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/movies",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"movies"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get movie by ID",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/movie/7f247773-b6f5-4e04-86fe-e49d60b5ea57",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"movie",
+												"7f247773-b6f5-4e04-86fe-e49d60b5ea57"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get movies by title",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/movies/title/El ejemplo malignoaaaaaaaaaaaaaaaaa",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"movies",
+												"title",
+												"El ejemplo malignoaaaaaaaaaaaaaaaaa"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create movie",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "    {\r\n        \"title\": \"El ejemplo malignoaaaaaaaaaaaaaaaaa\",\r\n        \"description\": \"descripción de ejemplo copia\",\r\n        \"poster_image_url\": \"https://example.com/posters/ejemplo.jpg\",\r\n        \"genre\": \"Terror\"\r\n    }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/movies",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"movies"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update movie",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "    {\r\n        \"title\": \"Rostros en la puchaina\",\r\n        \"description\": \"maldita puchaina\",\r\n        \"poster_image_url\": \"https://example.com/posters/rostros_de_la_puchainawwwwaaaaaaaaa.jpg\"\r\n    }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/movies/78864584-802c-405b-a849-b494750a9a45",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"movies",
+												"78864584-802c-405b-a849-b494750a9a45"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get movies by genre",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/movies/genre/terror",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"movies",
+												"genre",
+												"terror"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "healthcheck",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User service",
+					"item": [
+						{
+							"name": "CRUD",
+							"item": [
+								{
+									"name": "Get all users",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/users",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"users"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get user by ID",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/users/user/02f86e31-f29b-4c8a-be06-f8ae4c40249d",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"users",
+												"user",
+												"02f86e31-f29b-4c8a-be06-f8ae4c40249d"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get user by username",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/users/username/string",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"users",
+												"username",
+												"string"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get user by email",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/users/email/user@example.com",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"users",
+												"email",
+												"user@example.com"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update user",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MTg0ZDU2ZS1iZTZmLTQ5MGQtYThhOC04OTMzYWQxMzA2MGEiLCJyb2xlIjoiVXNlclJvbGUudXNlciIsImV4cCI6MTczMTAzNTY5NX0.-wKar-ir5-YJ6WWOdyJXjgHU4nug-xP7jI2B4KKyP1g",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"username\": \"stringuuuuu\",\r\n  \"password\": \"stringst\",\r\n  \"email\": \"user@example.com\",\r\n  \"role\": \"admin\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8000/users/update/02f86e31-f29b-4c8a-be06-f8ae4c40249d",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"users",
+												"update",
+												"02f86e31-f29b-4c8a-be06-f8ae4c40249d"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete user",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MTg0ZDU2ZS1iZTZmLTQ5MGQtYThhOC04OTMzYWQxMzA2MGEiLCJyb2xlIjoiVXNlclJvbGUudXNlciIsImV4cCI6MTczMTAzNTk5NX0.KDhj1gRWiEQBp-5BmSrHn64-NhYBFLbkmyNSj7X5BTg",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/users/delete/9c38350-e068-4881-af0a-7b856431401c",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"users",
+												"delete",
+												"9c38350-e068-4881-af0a-7b856431401c"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Auth",
+							"item": [
+								{
+									"name": "Create user",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"username\": \"string\",\r\n  \"password\": \"stringst\",\r\n  \"email\": \"user@example.com\",\r\n  \"role\": \"user\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8000/users/register",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"users",
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Login",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"email\": \"user@example.com\",\r\n  \"password\": \"stringst\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8000/auth/login",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"auth",
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Healtcheck",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000"
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Showtime service",
+					"item": [
+						{
+							"name": "CRUD",
+							"item": [
+								{
+									"name": "New Request",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/showtimes",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"showtimes"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Reservation service",
+					"item": [
+						{
+							"name": "CRUD",
+							"item": [
+								{
+									"name": "New Request",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8083/reservations/user/123e4567-e89b-12d3-a456-426614174000",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8083",
+											"path": [
+												"reservations",
+												"user",
+												"123e4567-e89b-12d3-a456-426614174000"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Healthcheck",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/healthcheck",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"healthcheck"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
