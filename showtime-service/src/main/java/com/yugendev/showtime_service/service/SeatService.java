@@ -79,7 +79,12 @@ public class SeatService {
     }
 
     public Mono<Void> deleteSeat(UUID showtimeId, String seatNumber) {
-        return seatRepository.deleteByShowtimeIdAndSeatNumber(showtimeId, seatNumber);
+        return seatRepository.deleteByShowtimeIdAndSeatNumber(showtimeId, seatNumber)
+                .doOnSuccess(aVoid -> {
+                    logger.info("Successfully deleted seat with number {} for showtime {}", seatNumber, showtimeId);
+                    rabbitTemplate.convertAndSend("seat-reservation-exchange", "seat-reservation-deleted", seatNumber);
+                })
+                .doOnError(ex -> logger.error("Error deleting seat with number {} for showtime {}: {}", seatNumber, showtimeId, ex.getMessage()));
     }
 
 }
