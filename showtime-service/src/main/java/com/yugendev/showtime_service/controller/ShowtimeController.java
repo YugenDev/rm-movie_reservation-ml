@@ -70,7 +70,7 @@ public class ShowtimeController {
 
     @PutMapping("/{id}/seats/unreserve")
     public Mono<Seat> unreserveSeat(@PathVariable UUID id, @RequestBody String seatNumber) {
-        return seatService.unreserveSeat(id, seatNumber);
+        return seatService.unreservedSeat(id, seatNumber);
     }
 
     @DeleteMapping("/{id}")

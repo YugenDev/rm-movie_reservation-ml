@@ -63,7 +63,7 @@ public class SeatService {
                 });
     }
 
-    public Mono<Seat> unreserveSeat(UUID showtimeId, String seatNumber) {
+    public Mono<Seat> unreservedSeat(UUID showtimeId, String seatNumber) {
         return seatRepository.findByShowtimeIdAndSeatNumber(showtimeId, seatNumber)
             .flatMap(seat -> {
                 if (!seat.isReserved()) {
@@ -74,7 +74,7 @@ public class SeatService {
             })
             .doOnSuccess(seat -> {
                 logger.info("Successfully unreserved seat: {}", seat);
-                rabbitTemplate.convertAndSend("seat-reservation-exchange", "seat-reservation-deleted", seat);
+                rabbitTemplate.convertAndSend("seat-reservation-exchange", "seat-reservation-unreserved", seat);
             });
     }
 

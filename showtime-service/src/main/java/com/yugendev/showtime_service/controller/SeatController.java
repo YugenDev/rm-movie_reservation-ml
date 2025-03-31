@@ -43,7 +43,7 @@ public class SeatController {
 
     @PutMapping("/{showtimeId}/{seatNumber}/unreserve")
     public Mono<Seat> unreserveSeat(@PathVariable UUID showtimeId, @PathVariable String seatNumber) {
-        return seatService.unreserveSeat(showtimeId, seatNumber);
+        return seatService.unreservedSeat(showtimeId, seatNumber);
     }
 
 }
