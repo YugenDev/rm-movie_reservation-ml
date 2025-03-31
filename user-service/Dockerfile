@@ -9,7 +9,7 @@ RUN apk add --no-cache --virtual .build-deps \
 
 COPY pyproject.toml poetry.lock* ./
 
-RUN poetry install --no-dev --no-root
+RUN poetry install --no-root
 
 COPY . .
 
