@@ -4,6 +4,7 @@ import com.yugendev.showtime_service.model.Seat;
 import com.yugendev.showtime_service.repository.SeatRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,12 @@ public class SeatService {
     private static final Logger logger = LoggerFactory.getLogger(SeatService.class);
 
     private final SeatRepository seatRepository;
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public SeatService(SeatRepository seatRepository) {
+    public SeatService(SeatRepository seatRepository, RabbitTemplate rabbitTemplate) {
         this.seatRepository = seatRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public Flux<Seat> getSeatsByShowtimeId(UUID showtimeId) {
@@ -35,7 +38,6 @@ public class SeatService {
         return seatRepository.findByShowtimeIdAndSeatNumber(showtimeId, seatNumber);
     }
 
-    // TODO: Implement rabbitMQ to notify other services when a seat is reserved
     public Mono<List<Seat>> reserveSeats(UUID showtimeId, List<String> seatNumbers) {
         return seatRepository.findAllByShowtimeIdAndSeatNumberIn(showtimeId, seatNumbers)
                 .filter(seat -> !seat.isReserved())
@@ -46,6 +48,10 @@ public class SeatService {
                     }
                     seats.forEach(seat -> seat.setReserved(true));
                     return seatRepository.saveAll(seats).collectList();
+                })
+                .doOnSuccess(seats -> {
+                    logger.info("Successfully reserved seats: {}", seats);
+                    rabbitTemplate.convertAndSend("seat-reservation-exchange", "seat-reservation-created", seats);
                 })
                 .onErrorMap(ex -> {
                     if (ex instanceof ResponseStatusException) {
